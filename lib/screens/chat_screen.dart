@@ -16,6 +16,15 @@ class _ChatScreenState extends State<ChatScreen> {
   String? msgTxt;
   final _firestore = FirebaseFirestore.instance;
 
+  void messageStream() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
+        print(message.data());
+        // Add your UI logic here to display the message in the chat view.
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -43,7 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                messageStream();
               }),
         ],
         title: const Text('⚡️Chat'),
